@@ -2,7 +2,13 @@
 <template>
     <div style="margin: 0 auto; width: 80%">
         <Panel header="CRUD PRESON">
-            <Menubar :model="items" />
+
+            <Menubar :model="items">
+                <template #start>
+                    <img alt="logo" src="https://politecnicocohan.edu.co/wp-content/uploads/2021/08/logo-politecnico.png"
+                        height="40" class="mr-2">
+                </template>
+            </Menubar>
             <br>
             <DataTable :value="person" :paginator="true" :rows="10">
                 <Column field="id_person" header="ID"></Column>
@@ -16,22 +22,28 @@
                 <span class="p-inputgroup-addon">
                     <i class="pi pi-user"></i>
                 </span>
-                <InputText id="name" type="text" v-model="persona.name" placeholder="Name" />
+                <InputText id="name" type="text" v-model="persona.name" placeholder="Name" style="width: 100%" />
             </div>
             <br>
             <div class="p-inputgroup">
                 <span class="p-inputgroup-addon">
                     <i class="pi pi-sort-numeric-down"></i>
                 </span>
-                <InputText id="name" type="text" v-model="persona.name" placeholder="Phone" />
+                <InputText id="name" type="text" v-model="persona.phone" placeholder="Phone" style="width: 100%" />
             </div>
             <br>
             <div class="p-inputgroup">
                 <span class="p-inputgroup-addon">
                     <i class="pi pi-envelope"></i>
                 </span>
-                <InputText id="name" type="text" v-model="persona.name" placeholder="E-mail" />
+                <InputText id="name" type="text" v-model="persona.email" placeholder="E-mail" style="width: 100%" />
             </div>
+            <template #footer>
+                <Button label="Guardar" icon="pi pi-user-plus" @click="closeBasic2"
+                    class="p-button-raised p-button-rounded" />
+                <Button label="Cancelar" icon="pi pi-times-circle" @click="closeBasic2" autofocus
+                    class="p-button-raised p-button-rounded" />
+            </template>
         </Dialog>
     </div>
 </template>
@@ -44,6 +56,7 @@ import Menubar from 'primevue/menubar';
 import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';
 import PersonService from "../service/PersonService";
+import Button from 'primevue/button';
 
 import 'primevue/resources/themes/nova-light/theme.css';
 import 'primevue/resources/primevue.min.css';
@@ -116,10 +129,17 @@ export default{
         Panel,
         Menubar,
         Dialog,
-        InputText
+        InputText,
+        Button
 	}
 }
 </script>
 
 <style>
+body {
+    background: #000000;
+    /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #96ffa4fb, #0a0046);
+    background: linear-gradient(to right, #96ffa4fb, #0a0046);
+}
 </style>
