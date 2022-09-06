@@ -7,4 +7,8 @@ export default class PersonService{
     getAll() {
         return axios.get(this.url + "all")
     }
+
+    save(person) {
+        return axios.post(this.url + "save", person);
+    }
 }

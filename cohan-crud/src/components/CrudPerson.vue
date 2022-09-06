@@ -1,16 +1,15 @@
 
 <template>
     <div style="margin: 0 auto; width: 80%">
-        <Panel header="CRUD PRESON">
+        <Panel header="LISTA DE CONTACTOS">
 
             <Menubar :model="items">
                 <template #start>
-                    <img alt="logo" src="https://politecnicocohan.edu.co/wp-content/uploads/2021/08/logo-politecnico.png"
-                        height="40" class="mr-2">
+                    <img alt="logo" src="https://www.beamar.co/logo-menu.png" height="40" class="mr-2">
                 </template>
             </Menubar>
             <br>
-            <DataTable :value="person" :paginator="true" :rows="10">
+            <DataTable :value="person" :paginator="true" :rows="10" selectionMode="single" :selection.sync="selectorPersona" dataKey="id_person">
                 <Column field="id_person" header="ID"></Column>
                 <Column field="name" header="Name"></Column>
                 <Column field="phone" header="phone"></Column>
@@ -39,9 +38,8 @@
                 <InputText id="name" type="text" v-model="persona.email" placeholder="E-mail" style="width: 100%" />
             </div>
             <template #footer>
-                <Button label="Guardar" icon="pi pi-user-plus" @click="closeBasic2"
-                    class="p-button-raised p-button-rounded" />
-                <Button label="Cancelar" icon="pi pi-times-circle" @click="closeBasic2" autofocus
+                <Button label="Guardar" icon="pi pi-user-plus" @click="save" class="p-button-raised p-button-rounded" />
+                <Button label="Cancelar" icon="pi pi-times-circle" @click="closeModal" autofocus
                     class="p-button-raised p-button-rounded" />
             </template>
         </Dialog>
@@ -68,6 +66,13 @@ export default{
         return{
             person : null, 
             persona : {
+                id: null,
+                name: null,
+                phone: null,
+                email: null
+            },
+            selectorPersona : {
+                id: null,
                 name: null,
                 phone: null,
                 email: null
@@ -84,7 +89,7 @@ export default{
                     label : 'Editar',
                     icon : 'pi pi-fw pi-user-edit',
                     command : () => {
-                        this.save();
+                        this.showEditModal();
                     }
                 },
                 {
@@ -116,11 +121,31 @@ export default{
         showSaveModal () {
             this.displayModal = true;
         },
+        showEditModal() {
+            this.persona = this.selectorPersona;
+            this.displayModal = true;
+        },
         getAll() {
             this.personService.getAll().then(data => {
             this.person = data.data;
             console.log(this.person);
             });
+        },
+        save (){
+            this.personService.save(this.person).then(data =>{
+                if(data.status === 200){
+                    this.displayModal = false;
+                    this.persona = {
+                        name: null,
+                        phone: null,
+                        email: null
+                    }
+                    this.getAll();
+                }
+            })
+        },
+        closeModal() {
+            this.displayModal = false;
         }
     },
     components: {
