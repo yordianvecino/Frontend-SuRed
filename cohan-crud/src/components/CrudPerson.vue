@@ -1,19 +1,23 @@
 
 <template>
     <div style="margin: 0 auto; width: 80%">
-        <Panel header="LISTA DE CONTACTOS">
-
+        <Toast/>
+        <Panel header="LISTA DE USUARIOS">
             <Menubar :model="items">
                 <template #start>
-                    <img alt="logo" src="https://www.beamar.co/logo-menu.png" height="40" class="mr-2">
+                    <img alt="logo" src="https://www.sured.com.co/wp-content/uploads/2020/07/Su-red-azul.png" height="40" class="mr-2">
                 </template>
             </Menubar>
             <br>
-            <DataTable :value="person" :paginator="true" :rows="10" selectionMode="single" :selection.sync="selectorPersona" dataKey="id_person">
+            <DataTable :value="person" :paginator="true" :rows="10" selectionMode="single"
+                :selection.sync="selectorPersona" dataKey="id_person">
                 <Column field="id_person" header="ID"></Column>
                 <Column field="name" header="Name"></Column>
-                <Column field="phone" header="phone"></Column>
-                <Column field="email" header="email"></Column>
+                <Column field="appeals" header="Appeals"></Column>
+                <Column field="phone" header="Phone"></Column>
+                <Column field="email" header="Email"></Column>
+                <Column field="city" header="City"></Column>
+                <Column field="country" header="Country"></Column>
             </DataTable>
         </Panel>
         <Dialog header="Crear Persona" :visible.sync="displayModal" :modal="true">
@@ -28,14 +32,35 @@
                 <span class="p-inputgroup-addon">
                     <i class="pi pi-sort-numeric-down"></i>
                 </span>
-                <InputText id="name" type="text" v-model="persona.phone" placeholder="Phone" style="width: 100%" />
+                <InputText id="appeals" type="text" v-model="persona.appeals" placeholder="Appeals" style="width: 100%" />
             </div>
             <br>
             <div class="p-inputgroup">
                 <span class="p-inputgroup-addon">
                     <i class="pi pi-envelope"></i>
                 </span>
-                <InputText id="name" type="text" v-model="persona.email" placeholder="E-mail" style="width: 100%" />
+                <InputText id="phone" type="text" v-model="persona.phone" placeholder="Phone" style="width: 100%" />
+            </div>
+            <br>
+            <div class="p-inputgroup">
+                <span class="p-inputgroup-addon">
+                    <i class="pi pi-envelope"></i>
+                </span>
+                <InputText id="email" type="text" v-model="persona.email" placeholder="E-mail" style="width: 100%" />
+            </div>
+            <br>
+            <div class="p-inputgroup">
+                <span class="p-inputgroup-addon">
+                    <i class="pi pi-envelope"></i>
+                </span>
+                <InputText id="city" type="text" v-model="persona.city" placeholder="City" style="width: 100%" />
+            </div>
+            <br>
+            <div class="p-inputgroup">
+                <span class="p-inputgroup-addon">
+                    <i class="pi pi-envelope"></i>
+                </span>
+                <InputText id="country" type="text" v-model="persona.country" placeholder="Country" style="width: 100%" />
             </div>
             <template #footer>
                 <Button label="Guardar" icon="pi pi-user-plus" @click="save" class="p-button-raised p-button-rounded" />
@@ -55,6 +80,7 @@ import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';
 import PersonService from "../service/PersonService";
 import Button from 'primevue/button';
+import Toast from 'primevue/toast';
 
 import 'primevue/resources/themes/nova-light/theme.css';
 import 'primevue/resources/primevue.min.css';
@@ -96,7 +122,7 @@ export default{
                     label : 'Eliminar',
                     icon : 'pi pi-fw pi-user-minus',
                     command : () => {
-                        this.save();
+                        this.delete();
                     }
                 },
                 {
@@ -131,6 +157,13 @@ export default{
             console.log(this.person);
             });
         },
+        delete() {
+            this.personService.delete(this.selectorPersona.id).then(data =>{
+                if(data.status === 200){
+                this.$toast.add({severity:'success', summary: 'Atencion!!', detail:'Se Elimino', life: 3000});
+                }
+            });
+        },
         save (){
             this.personService.save(this.person).then(data =>{
                 if(data.status === 200){
@@ -155,7 +188,8 @@ export default{
         Menubar,
         Dialog,
         InputText,
-        Button
+        Button,
+        Toast
 	}
 }
 </script>
@@ -164,7 +198,7 @@ export default{
 body {
     background: #000000;
     /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #96ffa4fb, #0a0046);
-    background: linear-gradient(to right, #96ffa4fb, #0a0046);
+    background: -webkit-linear-gradient(to right, #fdfdfdfb, #000000);
+    background: linear-gradient(to right, #fdfdfdfb, #000000);
 }
 </style>

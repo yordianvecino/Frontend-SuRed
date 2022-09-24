@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export default class PersonService{
 
-    url = "http://localhost:8080/api/v1/"
+    url = "http://localhost:7070/api/v1/"
 
     getAll() {
         return axios.get(this.url + "all")
@@ -10,5 +10,9 @@ export default class PersonService{
 
     save(person) {
         return axios.post(this.url + "save", person);
+    }
+
+    delete(id) {
+        return axios.get(this.url + "delete/" + id);
     }
 }
